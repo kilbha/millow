@@ -12,8 +12,7 @@ describe('Escrow', () => {
     beforeEach(async () => {
 
         // Get fake metamask users or accounts given by hardhat
-        [buyer, seller, inspector, lender] = await ethers.getSigners()
-        
+        [buyer, seller, inspector, lender] = await ethers.getSigners()       
 
 
         // Deploy Real Estate
@@ -21,7 +20,7 @@ describe('Escrow', () => {
         realEstate = await RealEstate.deploy()
 
         // Mint
-        let transaction = await realEstate.connect(seller).mint("https://ipfs.io/ipfs/QmQUozrHLAusXDxrvsESJ3PYB3rUeUuBAvVWw6nop2uu7c/1.png")
+        let transaction = await realEstate.connect(seller).mint("https://ipfs.io/ipfs/QmQUozrHLAusXDxrvsESJ3PYB3rUeUuBAvVWw6nop2uu7c/1.json")
         await transaction.wait()
 
         const Escrow = await ethers.getContractFactory('Escrow')
