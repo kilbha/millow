@@ -15,10 +15,35 @@ import config from './config.json';
 
 function App() {
 
+  const [provider, setProvider] = useState(null)
+  const [escrow, setEscrow] = useState(null)
+
   const [account, setAccount] = useState(null)
+  const [homes, setHome] = useState([])
 
   const loadBlochainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
+    setProvider(provider)
+
+    const network = await provider.getNetwork()
+
+    const realEstate = new ethers.Contract(config[network.chainId].realEstate.address,RealEstate, provider)
+    const totalSupply = await realEstate.totalSupply()
+    const homes = []
+    for(var i = 1;i <= totalSupply; i++){
+      const uri = await realEstate.tokenURI(i)
+      const response = await fetch(uri)
+      const metadata = await response.json()
+      homes.push(metadata)
+    }
+    setHome(homes)
+    console.log("HOmes", homes)
+    const escrow = new ethers.Contract(config[network.chainId].escrow.address,Escrow, provider)
+    setEscrow(escrow)
+
+    
+    
+    
 
     window.ethereum.on('accountsChanged', async () => {
       const accounts = await window.ethereum.request({method:"eth_requestAccounts"})
@@ -43,7 +68,8 @@ function App() {
         <hr />
 
         <div className='cards'>
-          <div className='card'>
+          {homes.map((home, index) => (
+            <div className='card' key={index}>
             <div className='card__image'>
               <img src=''  alt='Home'/>
             </div>
@@ -59,6 +85,8 @@ function App() {
               <p>123 Elm St</p>
             </div>
           </div>
+          ))}
+          
         </div>
 
       </div>
