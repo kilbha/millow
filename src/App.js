@@ -31,14 +31,12 @@ function App() {
     const totalSupply = await realEstate.totalSupply()    
     const homes = []
     for(var i = 1;i <= totalSupply; i++){
-      const uri = await realEstate.tokenURI(i)
-      console.log("URI is ", uri);
+      const uri = await realEstate.tokenURI(i)      
       const response = await fetch(uri)
       const metadata = await response.json()
       homes.push(metadata)
     }
-    setHome(homes)
-    console.log("HOmes", homes)
+    setHome(homes)    
     const escrow = new ethers.Contract(config[network.chainId].escrow.address,Escrow, provider)
     setEscrow(escrow)
 
@@ -65,7 +63,7 @@ function App() {
       <Search />
       <div className='cards__section'>
 
-        <h3>Homes for you</h3>
+        <h3>Homes For You</h3>
 
         <hr />
 
@@ -73,18 +71,18 @@ function App() {
           {homes.map((home, index) => (
             <div className='card' key={index}>
             <div className='card__image'>
-              <img src=''  alt='Home'/>
+              <img src={home.image}  alt='Home'/>
             </div>
             <div className='card__info'>
               <h4>
-                1 ETH
+                {home.attributes[0].value} ETH
               </h4>
               <p>
-                <strong>1</strong> bds |
-                <strong>2</strong> ba  |
-                <strong>3</strong> sqft
+                <strong>{home.attributes[2].value}</strong> bds |
+                <strong>{home.attributes[3].value}</strong> ba  |
+                <strong>{home.attributes[4].value}</strong> sqft
               </p>
-              <p>123 Elm St</p>
+              <p>{home.address}</p>
             </div>
           </div>
           ))}
