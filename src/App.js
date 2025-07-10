@@ -19,7 +19,7 @@ function App() {
   const [escrow, setEscrow] = useState(null)
 
   const [account, setAccount] = useState(null)
-  const [homes, setHome] = useState([])
+  const [homes, setHome] = useState([])  
 
   const loadBlochainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -28,10 +28,11 @@ function App() {
     const network = await provider.getNetwork()
 
     const realEstate = new ethers.Contract(config[network.chainId].realEstate.address,RealEstate, provider)
-    const totalSupply = await realEstate.totalSupply()
+    const totalSupply = await realEstate.totalSupply()    
     const homes = []
     for(var i = 1;i <= totalSupply; i++){
       const uri = await realEstate.tokenURI(i)
+      console.log("URI is ", uri);
       const response = await fetch(uri)
       const metadata = await response.json()
       homes.push(metadata)
@@ -48,6 +49,7 @@ function App() {
     window.ethereum.on('accountsChanged', async () => {
       const accounts = await window.ethereum.request({method:"eth_requestAccounts"})
       const account = ethers.utils.getAddress(accounts[0])
+      console.log("Accounts changed -- ", account);
       setAccount(account)
     })
   }

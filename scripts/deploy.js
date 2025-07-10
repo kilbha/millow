@@ -26,7 +26,7 @@ async function main() {
 
   for(let i = 0;i<3;i++){
     // Mint
-    let transaction = await realEstate.connect(seller).mint(`https://ipfs.io/ipfs/QmQUozrHLAusXDxrvsESJ3PYB3rUeUuBAvVWw6nop2uu7c/${i+1}.json`)
+    let transaction = await realEstate.connect(seller).mint(`https://copper-bizarre-jay-816.mypinata.cloud/ipfs/bafybeigitlcwk54sonfpzmjzwjnk54ldkgovgnm3x2sf4w62sgvjxkgcp4/${i+1}.json`)
     await transaction.wait()
   }
 
